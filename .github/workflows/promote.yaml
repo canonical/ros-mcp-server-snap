@@ -1,0 +1,14 @@
+name: promote
+
+on:
+  workflow_dispatch:
+
+jobs:
+  promote:
+    uses: canonical/robotics-actions-workflows/.github/workflows/promote.yaml@main
+    secrets:
+      snapstore-login: ${{ secrets.STORE_LOGIN }}
+    with:
+      snap: ros-mcp-server
+      from-channel: "latest/candidate"
+      to-channel: "latest/stable"

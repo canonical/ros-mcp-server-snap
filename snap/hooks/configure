@@ -1,0 +1,47 @@
+#!/bin/sh
+# configure hook — called by snapd when the user runs `snap set ros-mcp-server`
+# Supported keys:
+#   snap set ros-mcp-server transport=stdio           # stdio (default), http, or streamable-http
+#   snap set ros-mcp-server host=0.0.0.0              # host for HTTP transports (default: 127.0.0.1)
+#   snap set ros-mcp-server port=9000                 # port for HTTP transports (default: 9000)
+
+TRANSPORT="$(snapctl get transport)"
+HOST="$(snapctl get host)"
+PORT="$(snapctl get port)"
+
+if [ -n "${TRANSPORT}" ]; then
+    case "${TRANSPORT}" in
+        stdio|http|streamable-http) ;;
+        *)
+            echo "transport: must be one of: stdio, http, streamable-http" >&2
+            exit 1
+            ;;
+    esac
+fi
+
+if [ -n "${HOST}" ]; then
+    if ! echo "${HOST}" | grep -qE '^[a-zA-Z0-9._-]+$'; then
+        echo "host: invalid value '${HOST}'" >&2
+        exit 1
+    fi
+fi
+
+if [ -n "${PORT}" ]; then
+    if ! echo "${PORT}" | grep -qE '^[0-9]+$' || \
+       [ "${PORT}" -lt 1 ] || [ "${PORT}" -gt 65535 ]; then
+        echo "port: must be an integer between 1 and 65535" >&2
+        exit 1
+    fi
+fi
+
+# Manage the daemon based on transport.
+# HTTP-based transports → enable and (re)start the daemon.
+# stdio (or unset)      → disable and stop the daemon.
+case "${TRANSPORT}" in
+    http|streamable-http)
+        snapctl start --enable ros-mcp-server.daemon
+        ;;
+    *)
+        snapctl stop --disable ros-mcp-server.daemon
+        ;;
+esac
