@@ -45,7 +45,6 @@ apps:
     command: bin/ros-mcp-wrapper
     daemon: simple
     install-mode: disable
-    restart-condition: on-failure
     plugs:
       - network
       - network-bind
@@ -78,6 +77,3 @@ parts:
     source: snap/local/
     organize:
       ros-mcp-wrapper: bin/
-    override-build: |
-      craftctl default
-      chmod +x "${CRAFT_PART_INSTALL}/ros-mcp-wrapper"

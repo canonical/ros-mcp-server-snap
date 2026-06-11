@@ -14,7 +14,7 @@ It communicates with a running ROS system through a
 allowing LLMs to publish/subscribe to topics, call services and actions,
 set parameters, and monitor robot state in real time.
 
-Supports ROS 2 (Jazzy, Humble, and others) and ROS 1 distributions.
+Supports ROS 2 (Lyrical, Jazzy, Humble, and others) and ROS 1 distributions.
 
 ## Install
 

@@ -8,9 +8,9 @@
 #   snap set ros-mcp-server transport=http host=0.0.0.0 port=9000
 #   snap set ros-mcp-server transport=streamable-http port=8080
 
-TRANSPORT="$(snapctl get transport 2>/dev/null)"
-HOST="$(snapctl get host 2>/dev/null)"
-PORT="$(snapctl get port 2>/dev/null)"
+TRANSPORT="$(snapctl get transport)"
+HOST="$(snapctl get host)"
+PORT="$(snapctl get port)"
 
 set -- "$@"
 
@@ -18,12 +18,15 @@ if [ -n "${TRANSPORT}" ]; then
     set -- "$@" --transport "${TRANSPORT}"
 fi
 
-if [ -n "${HOST}" ]; then
-    set -- "$@" --host "${HOST}"
-fi
+# Only pass host/port when using HTTP transports
+if [ "${TRANSPORT}" = "http" ] || [ "${TRANSPORT}" = "streamable-http" ]; then
+    if [ -n "${HOST}" ]; then
+        set -- "$@" --host "${HOST}"
+    fi
 
-if [ -n "${PORT}" ]; then
-    set -- "$@" --port "${PORT}"
+    if [ -n "${PORT}" ]; then
+        set -- "$@" --port "${PORT}"
+    fi
 fi
 
 exec "${SNAP}/bin/ros-mcp" "$@"
