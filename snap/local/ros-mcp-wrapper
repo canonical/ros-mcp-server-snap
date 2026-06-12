@@ -1,0 +1,32 @@
+#!/bin/sh
+# Wrapper script for ros-mcp-server snap.
+# Reads snap configuration set via `snap set` and translates it into
+# CLI arguments for ros_mcp.main.
+#
+# Configure transport:
+#   snap set ros-mcp-server transport=stdio             # (default)
+#   snap set ros-mcp-server transport=http host=0.0.0.0 port=9000
+#   snap set ros-mcp-server transport=streamable-http port=8080
+
+TRANSPORT="$(snapctl get transport)"
+HOST="$(snapctl get host)"
+PORT="$(snapctl get port)"
+
+set -- "$@"
+
+if [ -n "${TRANSPORT}" ]; then
+    set -- "$@" --transport "${TRANSPORT}"
+fi
+
+# Only pass host/port when using HTTP transports
+if [ "${TRANSPORT}" = "http" ] || [ "${TRANSPORT}" = "streamable-http" ]; then
+    if [ -n "${HOST}" ]; then
+        set -- "$@" --host "${HOST}"
+    fi
+
+    if [ -n "${PORT}" ]; then
+        set -- "$@" --port "${PORT}"
+    fi
+fi
+
+exec "${SNAP}/bin/ros-mcp" "$@"

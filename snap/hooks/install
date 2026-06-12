@@ -1,0 +1,7 @@
+#!/bin/sh
+# Sets explicit defaults matching the ros-mcp executable's built-in defaults
+# so that `snap get ros-mcp-server` always shows the active configuration.
+
+snapctl set transport=stdio
+snapctl set host=127.0.0.1
+snapctl set port=9000

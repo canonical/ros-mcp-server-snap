@@ -1,0 +1,32 @@
+name: snap
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .github/workflows/promote.yaml
+      - README.md
+      - .gitignore
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - .github/workflows/promote.yaml
+      - README.md
+      - .gitignore
+  workflow_dispatch:
+
+jobs:
+  snap:
+    uses: canonical/robotics-actions-workflows/.github/workflows/snap.yaml@main
+    secrets:
+      snapstore-login: ${{ secrets.STORE_LOGIN }}
+    with:
+      runs-on: '["ubuntu-latest"]'
+      snap-track: latest
+      snap-risk: candidate
+      snap-test-script: |
+        #!/bin/bash
+        set -euxo pipefail
+        ros-mcp-server --help

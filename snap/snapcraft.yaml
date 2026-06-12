@@ -1,0 +1,79 @@
+name: ros-mcp-server
+base: core24
+adopt-info: ros-mcp-server
+title: ROS MCP Server
+license: Apache-2.0
+website: https://robotmcp.ai/
+source-code: https://github.com/ubuntu-robotics/ros-mcp-server-snap
+issues: https://github.com/ubuntu-robotics/ros-mcp-server-snap/issues
+contact: canonical-robotics-community-group@canonical.com
+summary: Connect AI Language Models with Robots on ROS using MCP
+description: |
+  ROS-MCP-Server connects large language models (such as Claude, GPT, and Gemini)
+  to robots, enabling bidirectional communication with no changes to existing robot
+  source code.
+
+  It uses the Model Context Protocol (MCP) to allow LLMs to publish/subscribe to
+  ROS topics, call services & actions, set parameters, and monitor robot state in
+  real time via a rosbridge WebSocket connection.
+
+  Supports ROS 2 (Jazzy, Humble, and others) and ROS 1 distributions.
+
+  When using HTTP or Streamable HTTP transports, the snap automatically runs
+  the server as a background daemon. Set the transport via
+  `snap set ros-mcp-server transport=http` (or `transport=streamable-http`)
+  and the daemon will start automatically.
+
+  Usage:
+    ros-mcp-server                                         # stdio transport (default)
+    ros-mcp-server --transport http --port 9000            # HTTP transport
+    ros-mcp-server --transport streamable-http --port 8080 # Streamable HTTP transport
+
+grade: stable
+confinement: strict
+
+apps:
+  ros-mcp-server:
+    command: bin/ros-mcp-wrapper
+    plugs:
+      - network
+      - network-bind
+
+  # Disabled by default; enabled automatically by the configure hook when
+  # `snap set ros-mcp-server transport=http` (or streamable-http) is used.
+  daemon:
+    command: bin/ros-mcp-wrapper
+    daemon: simple
+    install-mode: disable
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  ros-mcp-server:
+    plugin: python
+    source: https://github.com/robotmcp/ros-mcp-server.git
+    source-tag: v3.0.1
+    python-packages:
+      - pip
+      - setuptools
+      - wheel
+    build-packages:
+      - git
+    stage-packages:
+      - libgl1
+      - libxcb1
+    override-pull: |
+      craftctl default
+
+      # Checkout latest tagged version
+      git config --global --add safe.directory '*'
+      # set version and grade from code
+      version="$(git describe --always --tags| sed -e 's/^v//;y/-/./')"
+      craftctl set version="$version"
+
+  wrapper:
+    plugin: dump
+    source: snap/local/
+    organize:
+      ros-mcp-wrapper: bin/
