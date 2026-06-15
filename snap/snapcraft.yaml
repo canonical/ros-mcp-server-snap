@@ -4,8 +4,8 @@ adopt-info: ros-mcp-server
 title: ROS MCP Server
 license: Apache-2.0
 website: https://robotmcp.ai/
-source-code: https://github.com/ubuntu-robotics/ros-mcp-server-snap
-issues: https://github.com/ubuntu-robotics/ros-mcp-server-snap/issues
+source-code: https://github.com/canonical/ros-mcp-server-snap
+issues: https://github.com/canonical/ros-mcp-server-snap/issues
 contact: canonical-robotics-community-group@canonical.com
 summary: Connect AI Language Models with Robots on ROS using MCP
 description: |
