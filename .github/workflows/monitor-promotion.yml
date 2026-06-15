@@ -1,3 +1,5 @@
+name: Monitor Promotion Candidate to Stable
+
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -6,3 +8,5 @@ on:
 jobs:
   monitor-promotion-candidate-to-stable:
     uses: canonical/robotics-actions-workflows/.github/workflows/channel-risk-sync-monitor.yaml@main
+    permissions:
+      issues: write
