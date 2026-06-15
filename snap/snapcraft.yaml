@@ -31,6 +31,9 @@ description: |
 
 grade: stable
 confinement: strict
+platforms:
+  amd64:
+  arm64:
 
 apps:
   ros-mcp-server:
