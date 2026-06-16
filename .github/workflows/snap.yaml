@@ -23,7 +23,7 @@ jobs:
     secrets:
       snapstore-login: ${{ secrets.STORE_LOGIN }}
     with:
-      runs-on: '["ubuntu-latest"]'
+      runs-on: '["ubuntu-latest","ubuntu-24.04-arm"]'
       snap-track: latest
       snap-risk: candidate
       snap-test-script: |
