@@ -28,20 +28,17 @@ description: |
     ros-mcp-server                                         # stdio transport (default)
     ros-mcp-server --transport http --port 9000            # HTTP transport
     ros-mcp-server --transport streamable-http --port 8080 # Streamable HTTP transport
-
 grade: stable
 confinement: strict
 platforms:
   amd64:
   arm64:
-
 apps:
   ros-mcp-server:
     command: bin/ros-mcp-wrapper
     plugs:
       - network
       - network-bind
-
   # Disabled by default; enabled automatically by the configure hook when
   # `snap set ros-mcp-server transport=http` (or streamable-http) is used.
   daemon:
@@ -51,12 +48,11 @@ apps:
     plugs:
       - network
       - network-bind
-
 parts:
   ros-mcp-server:
     plugin: python
     source: https://github.com/robotmcp/ros-mcp-server.git
-    source-tag: v3.0.1
+    source-tag: v3.1.0
     python-packages:
       - pip
       - setuptools
@@ -74,7 +70,6 @@ parts:
       # set version and grade from code
       version="$(git describe --always --tags| sed -e 's/^v//;y/-/./')"
       craftctl set version="$version"
-
   wrapper:
     plugin: dump
     source: snap/local/
