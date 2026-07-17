@@ -5,6 +5,11 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  issues: read
+  pull-requests: write
+
 jobs:
   bump-snap-version:
     uses: canonical/robotics-actions-workflows/.github/workflows/bump-snap-version.yaml@main

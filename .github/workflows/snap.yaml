@@ -17,6 +17,10 @@ on:
       - .gitignore
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   snap:
     uses: canonical/robotics-actions-workflows/.github/workflows/snap.yaml@main
