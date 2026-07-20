@@ -12,5 +12,3 @@ permissions:
 jobs:
   monitor-promotion-candidate-to-stable:
     uses: canonical/robotics-actions-workflows/.github/workflows/channel-risk-sync-monitor.yaml@main
-    permissions:
-      issues: write
