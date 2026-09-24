@@ -52,7 +52,7 @@ parts:
   ros-mcp-server:
     plugin: python
     source: https://github.com/robotmcp/ros-mcp-server.git
-    source-tag: v3.1.1
+    source-tag: v3.1.2
     python-packages:
       - pip
       - setuptools
